@@ -11,80 +11,90 @@ from app.appconfig import *
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-'Instantiates object app of the class Class'
+'Instantiates object app of the class Dash'
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
-                suppress_callback_exceptions=True)
+                suppress_callback_exceptions=True, title='Sediment Analyst')
 
 # App layout
-app.layout = html.Div([  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
-    html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
-    dcc.Markdown(  # Web description
-        '''
+app.layout = html.Div(
+    children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
+        html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
+        # TODO: put an image of the Inn
+        # html.Img('/assets/river_inn.png'),
+        dcc.Markdown(  # Web description
+            '''
         #### Interactive sedimentological analyses
         
-        
+        Sediment Analyst is a web application coded in Python-3 to leverage a quick, interactive, and 
+        visual sedimentological analyses. By inputting datasets of sieved class weights (see example here), Sediment
+        Analyst computes characteristic grain sizes (namely, d10, d16, d25, d30, d50, d60, d75, d84, d90), mean grain 
+        size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
+        '''
+        ),
+        dcc.Markdown(
+            '''
         Enter below the information regarding your files. When *index* is indicated, enter the
-        __row index__, __column index__, separated by comma (,) in the fields below. For instance, if, in your file, the 
+        __row index__, __column index__, separated by comma (,) in the fields below. For instance, if the 
         sample name lives on the row 0 (first row) and column 2 (third column): type 0,2 in the field *samplename*.
         The fields are filled in by default according to a standard file sheet, which we made available 
         [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx).
         
         '''
-    ),
-    html.Br(),
+        ),
+        html.Br(),
 
-    # manual inputs
-    dcc.Input(id="header", type="number", placeholder="table's header", value=9),
-    dcc.Input(id="gs_clm", type="number", placeholder="grain sizes table column number (start from zero)", value=1),
-    dcc.Input(id="cw_clm", type="number", placeholder="class weight column number (start from zero)", value=2),
-    dcc.Input(id="n_rows", type="number", placeholder="class weight column number (start from zero)", value=16),
-    dcc.Input(id="porosity", type="number", placeholder="porosity index", value=2.4),
-    dcc.Input(id="SF_porosity", type="number", placeholder="SF_porosity index", value=2.5),
-    dcc.Input(id="index_lat", type="number", placeholder="latitute index", value=5.2),
-    dcc.Input(id="index_long", type="number", placeholder="longitude index", value=5.3),
-    dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
-    dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
-    dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
-    html.Button("run", id="btn_run"),
+        # manual inputs set as default according to the excel template, but can be changed in the interface
+        dcc.Input(id="header", type="number", placeholder="table's header", value=9),
+        dcc.Input(id="gs_clm", type="number", placeholder="grain sizes table column number (start from zero)", value=1),
+        dcc.Input(id="cw_clm", type="number", placeholder="class weight column number (start from zero)", value=2),
+        dcc.Input(id="n_rows", type="number", placeholder="class weight column number (start from zero)", value=16),
+        dcc.Input(id="porosity", type="number", placeholder="porosity index", value=2.4),
+        dcc.Input(id="SF_porosity", type="number", placeholder="SF_porosity index", value=2.5),
+        dcc.Input(id="index_lat", type="number", placeholder="latitute index", value=5.2),
+        dcc.Input(id="index_long", type="number", placeholder="longitude index", value=5.3),
+        dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
+        dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
+        dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
+        html.Button("run", id="btn_run"),
 
-    # store input
-    dcc.Store(id="store_manual_inputs"),
+        # store input indexes (row column containing sample information)
+        dcc.Store(id="store_manual_inputs"),
 
-    # files upload
-    dcc.Upload(  # drop and drag upload area for inputing files
-        id='upload-data',
-        children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
-        ]),
-        style=style_upload,
-        multiple=True  # Allow multiple files to be uploaded
-    ),
+        # files upload
+        dcc.Upload(  # drop and drag upload area for inputting files
+            id='upload-data',
+            children=html.Div([
+                'Drag and Drop or ',
+                html.A('Select Files')
+            ]),
+            style=style_upload,
+            multiple=True  # Allow multiple files to be uploaded
+        ),
 
-    # store global dataframe
-    dcc.Store(id='stored-data'),
+        # store global dataframe
+        dcc.Store(id='stored-data'),
 
-    # html.Div(id='output-div'),
-    html.Div(id='output-messages'),
+        # html.Div(id='output-div'),
+        html.Div(id='output-messages'),
 
-    # drop box with sample names
-    html.Div(id="dropdown-campaign_id"),
-    html.Br(),
+        # drop box with sample names
+        html.Div(id="dropdown-campaign_id"),
+        html.Br(),
 
-    # map
-    html.Div(id="div-map"),
-    html.Br(),
+        # map
+        html.Div(id="div-map"),
+        html.Br(),
 
-    # dropdown with type of statistics
-    html.Div(id="div-stat-drop"),
+        # dropdown with type of statistics
+        html.Div(id="div-stat-drop"),
 
-    # histogram
-    html.Div(id="div-histogram"),
+        # histogram
+        html.Div(id="div-histogram"),
 
-    # grain size distribution
-    html.Div(id="div-gsd"),
+        # grain size distribution
+        html.Div(id="div-gsd"),
 
-])
+    ])
 
 
 # Callback for the Upload (Drag and Drop or Select Files) box
@@ -124,6 +134,7 @@ def update_output(list_of_contents, list_of_names, list_of_dates, input, click):
         children.append(data2)
 
         return children
+
 
 # Callback for button for downloading summary statistics of all input samples
 @app.callback(
