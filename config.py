@@ -1,11 +1,11 @@
 """ This module contains all the imported packages (dependencies) and
-user inputs.
+user inputs for running the classes StatisticalAnalyzer and StaticPlotter.
 """
 
 try:
     import numpy as np
     import scipy
-    from pathlib2 import Path
+    from pathlib import Path
     from matplotlib import pyplot as plt
     from matplotlib.ticker import FormatStrFormatter
     import pandas as pd
@@ -21,7 +21,7 @@ try:
     from pyproj import Proj, transform, CRS
     import plotly.express as px
     import math
-except:
+except ImportError:
     print(
         "Error importing necessary packages")
 

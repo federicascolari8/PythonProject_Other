@@ -5,6 +5,7 @@ try:
     import dash
     import plotly.express as px
     from dash import dcc, Input, Output, State, html
-except:
+except ImportError:
     print(
         "Error importing necessary packages")
+
