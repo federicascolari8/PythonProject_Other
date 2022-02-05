@@ -35,9 +35,6 @@ class StatisticalAnalyzer:
         self.__compute_interp_df()
         self.compute_statistics_df()
         self.compute_porosity_conductivity_df()
-        self.test = 2
-
-
 
     def compute_cumulative_df(self):
         """
@@ -215,10 +212,6 @@ class StatisticalAnalyzer:
         self.statistics_df.at[18, "Value"] = d30 ** 2 / (d60 * d10)
         pass
 
-    def __interpolate_gs(self, ds):
-        interpolated_ds = 1  # continue here
-        return interpolated_ds
-
     def __compute_interp_df(self):
         # extract data from sample
         y = np.flip(np.array(self.cumulative_df["Grain Sizes [mm]"]))
@@ -242,7 +235,6 @@ class StatisticalAnalyzer:
         # create columns to same statistic name and value
         self.porosity_conductivity_df["Name"] = np.nan
         self.porosity_conductivity_df["Porosity"] = np.nan
-
 
         # name porosity predictions by author
         self.__porosity_name()
@@ -366,4 +358,3 @@ class StatisticalAnalyzer:
         kozeny_carman_kf = cte * ((Deff_i_cm / 100) ** 2) * (1 / (SF ** 2)) * ((e ** 3) / (1 + e))
 
         return kozeny_carman_kf
-
