@@ -37,7 +37,7 @@ def convert_coordinates(df, projection):
         df.at[iter, "lat"] = x2
         df.at[iter, "lon"] = y2
 
-        iter = +1
+        iter +=1
 
     return df
 

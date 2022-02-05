@@ -18,7 +18,7 @@ class StatisticalAnalyzer:
         """
 
         # Attributes
-        self.input = input
+        self.dict_how2read = input
         self.original_df = sieving_df
         self.cumulative_df = pd.DataFrame()
         self.statistics_df = pd.DataFrame()
@@ -94,7 +94,7 @@ class StatisticalAnalyzer:
 
     def __mean_grain_size_dm(self):
 
-        self.statistics_df.at[9, "Name"] = "Mean Grain Size dm: [mm]"
+        self.statistics_df.at[9, "Name"] = "Mean Grain Size dm [mm]"
         mean_gsdm = 0.0025 * self.__interpolation_df["Grain size (interpolated) "].sum()
         self.statistics_df.at[9, "Value"] = mean_gsdm
         pass
@@ -105,7 +105,7 @@ class StatisticalAnalyzer:
         fill statistics dataframe
         :return: None
         """
-        self.statistics_df.at[10, "Name"] = "Geometrical mean dg"
+        self.statistics_df.at[10, "Name"] = "Geometrical mean dg [mm]"
 
         d16 = self.statistics_df.at[1, "Value"]
         d84 = self.statistics_df.at[7, "Value"]

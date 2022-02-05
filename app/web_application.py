@@ -14,6 +14,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 'Instantiates object app of the class Dash'
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True, title='Sediment Analyst')
+# server = app.server  # method to serve the app, allows heroku to recognize the server
 
 # App layout
 app.layout = html.Div(
@@ -23,16 +24,19 @@ app.layout = html.Div(
         # html.Img('/assets/river_inn.png'),
         dcc.Markdown(  # Web description
             '''
-        #### Interactive sedimentological analyses
+        #### Introduction
         
         Sediment Analyst is a web application coded in Python-3 to leverage a quick, interactive, and 
-        visual sedimentological analyses. By inputting datasets of sieved class weights (see example here), Sediment
+        visual sedimentological analyses. By inputting datasets of sieved class weights (see examples 
+        [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx)), Sediment
         Analyst computes characteristic grain sizes (namely, d10, d16, d25, d30, d50, d60, d75, d84, d90), mean grain 
         size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
         '''
         ),
+        html.Br(),
         dcc.Markdown(
             '''
+        #### Inputs
         Enter below the information regarding your files. When *index* is indicated, enter the
         __row index__, __column index__, separated by comma (,) in the fields below. For instance, if the 
         sample name lives on the row 0 (first row) and column 2 (third column): type 0,2 in the field *samplename*.
@@ -55,11 +59,13 @@ app.layout = html.Div(
         dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
         dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
         dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
+        html.Br(),
+        html.Br(),
         html.Button("run", id="btn_run"),
 
         # store input indexes (row column containing sample information)
         dcc.Store(id="store_manual_inputs"),
-
+        html.Br(),
         # files upload
         dcc.Upload(  # drop and drag upload area for inputting files
             id='upload-data',
@@ -78,7 +84,7 @@ app.layout = html.Div(
         html.Div(id='output-messages'),
 
         # drop box with sample names
-        html.Div(id="dropdown-campaign_id"),
+        html.Div(id="dropdown-sample_id"),
         html.Br(),
 
         # map
@@ -143,7 +149,7 @@ def update_output(list_of_contents, list_of_names, list_of_dates, input, click):
     Input("btn_download", "n_clicks"),
     prevent_initial_call=True,
 )
-def func(data, n_clicks):
+def download_summary_stats(data, n_clicks):
     dataframe_global = pd.DataFrame(data=data["data"], columns=data["columns"])
     return dcc.send_data_frame(dataframe_global.to_csv, "overall_statistics.csv")
 
@@ -152,10 +158,10 @@ def func(data, n_clicks):
 @app.callback(
     Output('div-map', 'children'),
     State('stored-data', 'data'),
-    Input("campaign_id", "value"),
+    Input("sample_id", "value"),
     prevent_initial_call=True
 )
-def update_figure(data, samples):
+def update_map(data, samples):
     df = pd.DataFrame(data=data["data"], columns=data["columns"])
     fig = create_map(df=df, samples=samples)
     fig.update_layout(transition_duration=500)
@@ -202,7 +208,7 @@ def save_inputs(header, gs_clm, cw_clm, n_rows, porosity,
 @app.callback(
     Output('div-histogram', 'children'),
     State('stored-data', 'data'),
-    Input("campaign_id", "value"),
+    Input("sample_id", "value"),
     Input("statistics_id", "value"),
     prevent_initial_call=True
 )
@@ -227,17 +233,17 @@ def update_histogram(data, samples, stat_value):
 
 
 # Callback for updating campaign information (or id)
-@app.callback(Output("dropdown-campaign_id", "children"),
+@app.callback(Output("dropdown-sample_id", "children"),
               Input("btn_run", "n_clicks"),
               State('stored-data', 'data'),
               prevent_initial_call=True  # prevents that this callback is ran
               # before the inputs (outputs of previous callbacks) are available
               )
-def update_campaign_id(n_clicks, data):  # n_clicks is mandatory even if not used
+def update_sample_id(n_clicks, data):  # n_clicks is mandatory even if not used
     df = pd.DataFrame(data=data["data"], columns=data["columns"])
     samples = df["sample name"].tolist()
 
-    return dcc.Dropdown(id="campaign_id",
+    return dcc.Dropdown(id="sample_id",
                         options=[{"label": x, "value": x}
                                  for x in samples],
                         value=samples,
@@ -266,7 +272,7 @@ def update_stat_drop(n_clicks, data):
 @app.callback(
     Output('div-gsd', 'children'),
     State('stored-data', 'data'),
-    Input("campaign_id", "value"),
+    Input("sample_id", "value"),
     prevent_initial_call=True
 )
 def update_gsd(data, samples):
