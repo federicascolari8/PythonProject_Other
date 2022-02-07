@@ -6,6 +6,7 @@ Author : Federica Scolari
 
 from config import *
 from app.appconfig import *
+import plotly.express as px
 
 class InteractivePlotter:
     def __init__(self, df):

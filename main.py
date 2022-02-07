@@ -43,14 +43,12 @@ def main():
         df_global = append_global(obj=analyzer,
                                   df=df_global
                                   )
-
+        df_global.to_excel("plot/global_dataframe.xlsx")
         # call the class StaticPlotter
         plotter = StaticPlotter(analyzer)
 
         # plot the cumulative grain size distribution curve
         plotter.cum_plotter('plot/' + file_name[8:-5] + '.png')
-
-    #df_global.to_excel("plot/global_dataframe.xlsx")
 
     pass
 
