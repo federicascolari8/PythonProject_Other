@@ -17,77 +17,6 @@ style_upload = {
     'margin': '10px'
 }
 
-
-def convert_coordinates(df, projection):
-    """
-    transform coordinates of a give projection in degrees
-    :param df:
-    :param projection:
-    :return:
-    """
-    # import projections
-    inproj = CRS.from_string(projection)  # Pseudo mercator
-    outproj = CRS.from_string('epsg:4326')  # WGS 83 degrees
-
-    iter = 0
-    for y1, x1 in df[["lat", "lon"]].itertuples(index=False):
-        x2, y2 = transform(inproj, outproj, x1, y1)
-
-        # solution with out correction
-        df.at[iter, "lat"] = x2
-        df.at[iter, "lon"] = y2
-
-        iter +=1
-
-    return df
-
-
-def create_map(df, projection="epsg:3857", samples=None):
-    """
-    create a scatter map based on the dataframe
-    :param df:
-    :param projection:
-    :return:
-    """
-
-    # convert coordinates to input projection
-    df = convert_coordinates(df=df,
-                             projection=projection)
-    # filter samples given inside dropdown
-    df = df[df["sample name"].isin(samples)]
-
-    # create scatter with Open Street Map
-    fig = px.scatter_mapbox(df,
-                            lat=df["lat"],
-                            lon=df["lon"],
-                            hover_name="sample name",
-                            hover_data=df.columns[4:22],
-                            zoom=11)
-    # Open street map mapbox/works for everywhere
-    fig.update_layout(
-        mapbox_style="open-street-map",
-    )
-
-    # USGS mapbox/works is a very good resolution for the US
-    # but not for EU.
-
-    # fig.update_layout(
-    #     mapbox_style="white-bg",
-    #     mapbox_layers=[
-    #         {
-    #             "below": 'traces',
-    #             "sourcetype": "raster",
-    #             "sourceattribution": "United States Geological Survey",
-    #             "source": [
-    #                 "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
-    #             ]
-    #         }
-    #     ])
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-
-    return fig
-
-
 # Auxiliary function for parsing contents of the files
 def parse_contents(contents, filename, date, input):
     """
@@ -169,7 +98,8 @@ def parse_contents(contents, filename, date, input):
     except Exception as e:
         print(e)
         return html.Div([filename,
-                         ': There was an error processing the file. Ensure that your file does not contain too many columns (< 15).'
+                         ': There was an error processing the file. '
+                         'Ensure that your file does not contain too many columns (< 15).'
                          ])
 
     return analyzer, html.Div([filename, ': File successfully read'])
