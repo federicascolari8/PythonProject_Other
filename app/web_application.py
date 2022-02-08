@@ -21,8 +21,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
         html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
-        # TODO: put an image of the Inn
-        # html.Img('/assets/river_inn.png'),
+        html.Img(scr='/assets/river_inn.png'),
         dcc.Markdown(  # Web description
             '''
         #### Introduction
