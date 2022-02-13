@@ -4,6 +4,7 @@ Author : Beatriz Negreiros
 
 """
 
+from app.interac_plotter import InteractivePlotter
 from statisticalanalyzer.utils import *
 from app.apputils import *
 from config import *
@@ -20,8 +21,8 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
         html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
-        # TODO: put an image of the Inn
-        # html.Img('/assets/river_inn.png'),
+        html.Img(src='https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/river_inn.png',
+                 style={'width': '100%', 'height': '500px', 'display': 'inline-block !important', 'margin': 'auto !important'}),  # Image
         dcc.Markdown(  # Web description
             '''
         #### Introduction
@@ -163,7 +164,8 @@ def download_summary_stats(data, n_clicks):
 )
 def update_map(data, samples):
     df = pd.DataFrame(data=data["data"], columns=data["columns"])
-    fig = create_map(df=df, samples=samples)
+    int_plot = InteractivePlotter(df)
+    fig = int_plot.create_map(df=df, samples=samples)
     fig.update_layout(transition_duration=500)
     return dcc.Graph(id="map", figure=fig)
 
