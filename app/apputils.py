@@ -1,7 +1,11 @@
+""" Utils for the web application
+
+Author: Beatriz Negreiros
+
 """
-Utils for the web application
-"""
-from config import *
+
+
+import pandas as pd
 from app.appconfig import *
 from statisticalanalyzer.statistical_analyzer import StatisticalAnalyzer
 
@@ -16,6 +20,52 @@ style_upload = {
     'textAlign': 'center',
     'margin': '10px'
 }
+
+input_boxes = [
+    dcc.Markdown(
+        '''
+        Delete default input values below for personalizing the parsing of the files contents when not using our 
+        [template](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx).
+        In following, press the 'RUN' buttom below '''),
+    dcc.Input(id="header", type="number", placeholder="table's header", value=9),
+    dcc.Input(id="gs_clm", type="number", placeholder="grain sizes table column number (start from zero)",
+             value=1),
+    dcc.Input(id="cw_clm", type="number", placeholder="class weight column number (start from zero)",
+             value=2),
+    dcc.Input(id="n_rows", type="number", placeholder="class weight column number (start from zero)",
+             value=16),
+    dcc.Input(id="porosity", type="number", placeholder="porosity index", value=2.4),
+    dcc.Input(id="SF_porosity", type="number", placeholder="SF_porosity index", value=2.5),
+    dcc.Input(id="index_lat", type="number", placeholder="latitute index", value=5.2),
+    dcc.Input(id="index_long", type="number", placeholder="longitude index", value=5.3),
+    dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
+    dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
+    dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
+               ]
+
+intro_text = dcc.Markdown(
+        '''
+        #### Introduction
+        
+        Sediment Analyst is a web application coded in Python-3 to leverage a quick, interactive, and 
+        visual sedimentological analyses. By inputting datasets of sieved class weights (see examples 
+        [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx)), Sediment
+        Analyst computes characteristic grain sizes (namely, d10, d16, d25, d30, d50, d60, d75, d84, d90), mean grain 
+        size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
+        '''
+        )
+inputs_text = dcc.Markdown(
+            '''
+        #### Inputs
+        Enter below the information regarding your files. When *index* is indicated, enter the
+        __row index__, __column index__, separated by comma (,) in the fields below. For instance, if the 
+        sample name lives on the row 0 (first row) and column 2 (third column): type 0,2 in the field *samplename*.
+        The fields are currently filled in by default according to our template, which we made available 
+        [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx).
+        
+        '''
+        )
+
 
 # Auxiliary function for parsing contents of the files
 def parse_contents(contents, filename, date, input):

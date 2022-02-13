@@ -7,12 +7,11 @@ Author : Beatriz Negreiros
 from app.interac_plotter import InteractivePlotter
 from statisticalanalyzer.utils import *
 from app.apputils import *
-from config import *
 from app.appconfig import *
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-'Instantiates object app of the class Dash'
+# Instantiates object app of the class Dash
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True, title='Sediment Analyst')
 # server = app.server  # method to serve the app, allows heroku to recognize the server
@@ -21,45 +20,16 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
         html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
-        html.Img(src='https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/river_inn.png',
-                 style={'width': '100%', 'height': '500px', 'display': 'inline-block !important', 'margin': 'auto !important'}),  # Image
-        dcc.Markdown(  # Web description
-            '''
-        #### Introduction
-        
-        Sediment Analyst is a web application coded in Python-3 to leverage a quick, interactive, and 
-        visual sedimentological analyses. By inputting datasets of sieved class weights (see examples 
-        [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx)), Sediment
-        Analyst computes characteristic grain sizes (namely, d10, d16, d25, d30, d50, d60, d75, d84, d90), mean grain 
-        size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
-        '''
-        ),
+        html.Img(src='https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/app/assets/Ering_Germany-2.jpeg',
+                 style={'width': '100%', 'height': '500px', 'display': 'inline-block !important',
+                        'margin': 'auto !important'}),  # Image
+        intro_text,
         html.Br(),
-        dcc.Markdown(
-            '''
-        #### Inputs
-        Enter below the information regarding your files. When *index* is indicated, enter the
-        __row index__, __column index__, separated by comma (,) in the fields below. For instance, if the 
-        sample name lives on the row 0 (first row) and column 2 (third column): type 0,2 in the field *samplename*.
-        The fields are filled in by default according to a standard file sheet, which we made available 
-        [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx).
-        
-        '''
-        ),
+        inputs_text,
         html.Br(),
 
         # manual inputs set as default according to the excel template, but can be changed in the interface
-        dcc.Input(id="header", type="number", placeholder="table's header", value=9),
-        dcc.Input(id="gs_clm", type="number", placeholder="grain sizes table column number (start from zero)", value=1),
-        dcc.Input(id="cw_clm", type="number", placeholder="class weight column number (start from zero)", value=2),
-        dcc.Input(id="n_rows", type="number", placeholder="class weight column number (start from zero)", value=16),
-        dcc.Input(id="porosity", type="number", placeholder="porosity index", value=2.4),
-        dcc.Input(id="SF_porosity", type="number", placeholder="SF_porosity index", value=2.5),
-        dcc.Input(id="index_lat", type="number", placeholder="latitute index", value=5.2),
-        dcc.Input(id="index_long", type="number", placeholder="longitude index", value=5.3),
-        dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
-        dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
-        dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
+        html.Div(input_boxes),
         html.Br(),
         html.Br(),
         html.Button("run", id="btn_run"),
