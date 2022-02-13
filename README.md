@@ -59,8 +59,10 @@ Module containing all the imported packages and the user inputs necessary for ru
 
 ##static_plotter.py
 
-Method which plots and saves as an image the cumulative grain size distribution curve for each sample.
+File in which the `StaticPlotter` Class is stored. This Class defines the methods which allow the
+plotting and saving as an image of the cumulative grain size distribution curve for each collected sample.
 
+The methods composing the `StaticPlotter` Class are the following:
 
 ### `__init__()`
 
@@ -123,7 +125,10 @@ Module containing the imported packages necessary to correctly configure the env
 <br/>
 
 ##interac_plotter.py
-Module designed for the creation of the map used to indicate the location of the collected samples and the interactive plots for the comparison of the results.   
+Module containing the `InteractivePlotter` Class. It has been designed for the creation of the map, 
+used to indicate the location of the collected samples, and the interactive plots necessary for the 
+comparison of the results of the statistical analysis.  
+Here below the description of the methods defined in the `InteractivePlotter` Class:
 
 ### `convert_coordinates()`
 
