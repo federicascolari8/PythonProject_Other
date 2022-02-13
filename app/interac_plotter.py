@@ -18,10 +18,10 @@ class InteractivePlotter:
 
     def convert_coordinates(self, df, projection):
         """
-        transform coordinates of a give projection in degrees
-        :param df:
-        :param projection:
-        :return:
+        Method which transforms the coordinates of a give projection to degrees
+        :param df: dataframe on which the coordinate transformation is applied
+        :param projection: name of the initial projection
+        :return: df
         """
         # import projections
         inproj = CRS.from_string(projection)  # Pseudo mercator
@@ -31,7 +31,7 @@ class InteractivePlotter:
         for y1, x1 in df[["lat", "lon"]].itertuples(index=False):
             x2, y2 = transform(inproj, outproj, x1, y1)
 
-            # solution with out correction
+            # solution without correction
             df.at[iter, "lat"] = x2
             df.at[iter, "lon"] = y2
 
@@ -42,10 +42,10 @@ class InteractivePlotter:
     def create_map(self, df, projection="epsg:3857", samples=None):
         """
         create a scatter map based on the dataframe
-        :param df:
-        :param projection:
-        :param samples:
-        :return:
+        :param df: dataframe on which the coordinate transformation is applied
+        :param projection: name of the initial projection
+        :param samples: sample names
+        :return: fig
         """
 
         # convert coordinates to input projection
@@ -62,10 +62,6 @@ class InteractivePlotter:
                                 hover_data=df.columns[4:22],
                                 color='sample name',
                                 zoom=11)
-        # Open street map mapbox/works for everywhere
-
-        # USGS mapbox/works is a very good resolution for the US
-        # but not for EU.
 
         fig.update_layout(
             mapbox_style="open-street-map",
@@ -75,6 +71,12 @@ class InteractivePlotter:
         return fig
 
     def plot_histogram(self, param, samples):
+        """
+        Method to plot the results in a bar chart for the interactive comparison of the results
+        :param param: statistical parameters selectable from the user
+        :param samples: sample names
+        :return: fig
+        """
 
         # Create a new dataframe, with two columns:
         # one to identify the samples' name and one for their corresponding value
@@ -120,6 +122,11 @@ class InteractivePlotter:
     #     return fig
 
     def plot_gsd(self, samples):
+        """
+        Method which plots the cumulative grain size distribution curve for all selected samples
+        :param samples: sample names
+        :return: fig
+        """
         # filter samples given sample name
         df = self.df[self.df["sample name"].isin(samples)]
 
@@ -134,10 +141,8 @@ class InteractivePlotter:
                       labels={"gsd": "Grain Size [mm]", "cw": "Percentage [%]", "sample name": "Sample Name"},
                       color='sample name', title="Grain Size Distribution Curve")
 
-        # Set xaxis scale as log
         fig.update_xaxes(type="log")
 
-        # Modify title font size
         fig.update_layout(title_font_size=20,
                           legend_bordercolor='darkgrey')
 

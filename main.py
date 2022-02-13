@@ -21,7 +21,8 @@ from config import get_input
 
 
 def main():
-    # Instantiate sdataframe to hold all the  the samples statistics
+
+    # Instantiate a dataframe to hold all the  the samples statistics
     df_global = pd.DataFrame()
 
     # Input indexes without been global variable (same function used by the web application)
