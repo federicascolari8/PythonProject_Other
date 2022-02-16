@@ -6,11 +6,10 @@ __pycache__/
 .DS_Store
 
 # User-defined ignoring folders
-plot/
 stuff/
 templates/
 folder_test/
-datasets/
+
 
 # C extensions
 *.so
