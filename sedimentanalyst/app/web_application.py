@@ -19,8 +19,8 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
         html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
-        html.Img(src='https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/app/assets'
-                     '/Ering_Germany-2.jpeg',
+        html.Img(src='https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/sedimentanalyst/app'
+                     '/assets/Ering_Germany.jpg',
                  style={'width': '100%', 'height': '500px', 'display': 'inline-block !important',
                         'margin': 'auto !important'}),  # Image
         intro_text,
@@ -43,15 +43,15 @@ app.layout = html.Div(
             multiple=True  # Allow multiple files to be uploaded
         ),
         html.Br(),
-        html.Button('Run analysis', id='btn_run'),
 
         # store input indexes (row column containing sample information)
-        html.Br(),
         dcc.Store(id='store_manual_inputs'),
+        html.Button('Run analysis', id='btn_run'),
         html.Br(),
 
         # store global dataframe
         dcc.Store(id='stored-data'),
+        html.Br(),
 
         # html.Div(id='output-div'),
         html.Div(id='output-messages'),
@@ -186,11 +186,11 @@ def save_inputs(header, gs_clm, cw_clm, n_rows, porosity,
 @app.callback(
     Output('div-histogram', 'children'),
     State('stored-data', 'data'),
+    State('statistics_id', 'value'),
     Input('sample_id', 'value'),
-    Input('statistics_id', 'value'),
     prevent_initial_call=True
 )
-def update_histogram(data, samples, stat_value):
+def update_histogram(data, stat_value, samples):
     # save into dataframe
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
 
