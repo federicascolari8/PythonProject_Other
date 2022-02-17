@@ -5,7 +5,7 @@ Author : Beatriz Negreiros
 """
 from sedimentanalyst.app import interac_plotter
 from sedimentanalyst.analyzer.utils import *
-from sedimentanalyst.app.apputils import *
+from sedimentanalyst.app.accessories import *
 from sedimentanalyst.app.appconfig import *
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -15,6 +15,9 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True, title='Sediment Analyst')
 # server = app.server  # method to serve the app, allows heroku to recognize the server
 
+# Instantiates to get functionalities of the class Accessories
+acc = Accessories()
+
 # App layout
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
@@ -23,13 +26,13 @@ app.layout = html.Div(
                      '/assets/Ering_Germany.jpg',
                  style={'width': '100%', 'height': '500px', 'display': 'inline-block !important',
                         'margin': 'auto !important'}),  # Image
-        intro_text,
+        acc.intro_text,
         html.Br(),
-        inputs_text,
+        acc.inputs_text,
         html.Br(),
 
         # manual inputs set as default according to the excel template, but can be changed in the interface
-        html.Div(input_boxes),
+        html.Div(acc.input_boxes),
         html.Br(),
 
         # files upload
@@ -39,7 +42,7 @@ app.layout = html.Div(
                 'Drag and Drop or ',
                 html.A('Select Files')
             ]),
-            style=style_upload,
+            style=acc.style_upload,
             multiple=True  # Allow multiple files to be uploaded
         ),
         html.Br(),
@@ -98,14 +101,15 @@ def update_output(list_of_contents, list_of_names, list_of_dates, input, click):
         # iterating through files and appending reading messages as well as
         # analysis objects (analyzers)
         for c, n, d in zip(list_of_contents, list_of_names, list_of_dates):
-            from_parsing = parse_contents(c, n, d, input)
+            from_parsing = acc.parse_contents(c, n, d, input)
             # children.append(from_parsing[1])
             analyzers.append(from_parsing[0])
+
         # append all information from the list of analyzers into a global df
         for inter_analyzer in analyzers:
             df_global = append_global(obj=inter_analyzer,
-                                      df=df_global
-                                      )
+                                      df=df_global)
+
         # return summary statistics
         data2 = df_global.to_dict('split')
         children.append(html.Div([
@@ -186,7 +190,7 @@ def save_inputs(header, gs_clm, cw_clm, n_rows, porosity,
 @app.callback(
     Output('div-histogram', 'children'),
     State('stored-data', 'data'),
-    State('statistics_id', 'value'),
+    Input('statistics_id', 'value'),
     Input('sample_id', 'value'),
     prevent_initial_call=True
 )
@@ -271,7 +275,7 @@ def update_gsd(data, samples):
                      figure=fig,
                      style={'display': 'inline-table',
                             'width': '75%',
-                            'text-align': 'center'},
+                            'text-align': 'center'}
                      )
 
 
