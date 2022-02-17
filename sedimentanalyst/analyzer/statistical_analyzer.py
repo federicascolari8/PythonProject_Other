@@ -123,7 +123,10 @@ class StatisticalAnalyzer:
     def __sorting_index_1_ds(self):
         """
         Compute Sorting Index by Bunte & Abt 2001 sqrt(d84/d16) and
-        fill statistics dataframe
+        fill statistics dataframe.
+
+        Note: the Sorting Index (SO) is an indicator of available pore space. The higher the SO, the less is the
+        available pore space.
         :return:
         """
         self.statistics_df.at[11, "Name"] = "Sorting Index 1 ds"
@@ -136,8 +139,11 @@ class StatisticalAnalyzer:
 
     def __fredle_index(self):
         """
-        Compute fredle_index that equals  Geometrical mean dg (simplified)
-        derived by the Sorting Index and fills statistic dataframe
+        Compute the Fredle Index and fills the statistics dataframe. The Fredle Index is defined as the as quotient of
+        the geometric grain size and sorting coefficient.
+
+        Note: the Fredle Index (FI) is an indicator of available pore space. The higher the FI, the higher is the
+        available pore space.
         :return:
         """
         self.statistics_df.at[12, "Name"] = "Fredle - Index"
@@ -147,7 +153,10 @@ class StatisticalAnalyzer:
 
     def __standard_deviation(self):
         """
-        Compute grain size standard deviation and fills statistic dataframe
+        Compute grain size standard deviation and fills statistic dataframe.
+
+        Note: Standard deviation is a measure of the spread and scatter of these sizes around the average or mean
+        grain size (Baiyegunhi, C., Liu, K., & Gwavava, O. , 2017).
         :return:
         """
         self.statistics_df.at[13, "Name"] = "Grain Size std"
