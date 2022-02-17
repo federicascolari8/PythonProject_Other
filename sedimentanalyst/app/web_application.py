@@ -15,7 +15,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True, title='Sediment Analyst')
 # server = app.server  # method to serve the app, allows heroku to recognize the server
 
-# Instantiates to get functionalities of the class Accessories
+# Instantiates to get functionalities of the class Accessories (accessories.py)
 acc = Accessories()
 
 # App layout
@@ -35,9 +35,12 @@ app.layout = html.Div(
         html.Div(acc.input_boxes),
         html.Br(),
 
-        # files upload
+        # [Component for collecting State objective for future calling Callback 1]
+        # Component for uploading files
         dcc.Upload(  # drop and drag upload area for inputting files
             id='upload-data',
+
+            # returns elements for future firing and Callback 2
             children=html.Div([
                 'Drag and Drop or ',
                 html.A('Select Files')
@@ -49,6 +52,8 @@ app.layout = html.Div(
 
         # store input indexes (row column containing sample information)
         dcc.Store(id='store_manual_inputs'),
+
+        # [fires up Callback 3...]
         html.Button('Run analysis', id='btn_run'),
         html.Br(),
 
@@ -82,7 +87,8 @@ app.layout = html.Div(
     ])
 
 
-# Callback for the Upload (Drag and Drop or Select Files) box
+# [Callback 1] for computing and storing summary statistics of the files and returning button component for firing up
+# Callback 2
 @app.callback(Output('output-messages', 'children'),
               Output('stored-data', 'data'),
               Input('upload-data', 'contents'),
@@ -122,7 +128,7 @@ def update_output(list_of_contents, list_of_names, list_of_dates, input, click):
         return children
 
 
-# Callback for button for downloading summary statistics of all input samples
+# [Callback 2] for button for downloading summary statistics of all input samples
 @app.callback(
     Output('download-dataframe-csv', 'data'),
     State('stored-data', 'data'),
