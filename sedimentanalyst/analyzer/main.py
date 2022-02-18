@@ -35,7 +35,8 @@ def main():
         sieving_df, metadata = extract_df(dic=input_local, file=file_name)
 
         # call the class StatisticalAnalyzer
-        analyzer = StatisticalAnalyzer(input=input_local, sieving_df=sieving_df, metadata=metadata)
+        analyzer = StatisticalAnalyzer(sieving_df=sieving_df, metadata=metadata)
+
         # print(analyzer.sampledate, analyzer.samplename, analyzer.coords)
 
         # append global dataframe
