@@ -64,7 +64,7 @@ app.layout = html.Div(
         html.Br(),
 
         # html.Div(id='output-div'),
-        html.Div(id='output-messages'),
+        html.Div(id='download-buttom'),
         html.Br(),
 
         # drop box with sample names
@@ -125,7 +125,7 @@ def save_inputs(header, gs_clm, cw_clm, n_rows, porosity,
 
 # Callback 2: for parsing inputs, computing and storing summary statistics of the files and returning button component
 # "Download Summary Statistics", which fires up Callback 3
-@app.callback(Output('output-messages', 'children'),
+@app.callback(Output('download-buttom', 'children'),
               Output('stored-data', 'data'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'),
@@ -144,8 +144,7 @@ def parse_and_analyse(list_of_contents, list_of_names, list_of_dates, input_dict
         # analysis objects (analyzers)
         for c, n, d in zip(list_of_contents, list_of_names, list_of_dates):
             from_parsing = acc.parse_contents(c, n, d, input_dict_in_layout)
-            # children.append(from_parsing[1])
-            list_analyzers.append(from_parsing[0])
+            list_analyzers.append(from_parsing)
 
         # append all information from the list of analyzers into a global df
         for inter_analyzer in list_analyzers:
