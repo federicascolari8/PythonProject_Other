@@ -1,4 +1,4 @@
-""" Utils for the web application
+""" Accessory elements for the web app
 
 Author: Beatriz Negreiros
 
@@ -9,7 +9,29 @@ from sedimentanalyst.analyzer.statistical_analyzer import StatisticalAnalyzer
 
 
 class Accessories:
+    """
+    A class for allocating accessories elements for the Dash app, including layout and Dash component settings,
+    extensive callouts and parsing of input contents.
+
+    Attributes:
+        style-upload (dict): style information for a dropbox component
+        intro_text (dash.dcc.Markdown.Markdown): markdown test for introducing the app
+        inputs_text (dash.dcc.Markdown.Markdown): markdown text for explaining the inputs
+        img_style(dict): style information for formatting images
+        input_boxes (list): list of Input objects for enabling user to enter the indexing information to read from
+        his/her files
+        style_graph (dict) style information for the graph components
+        style_statistic (dict): style information for the statistic dropdown
+
+    Methods:
+        parse_contents (tuple): tuple of object (sedimentanalyst.analyzer.StatisticalAnalyzer) plus an object of
+        type html.Div with reading messages.
+    """
+
     def __init__(self):
+        """
+        Initializes object of the class Accessories, no input parameter is required
+        """
         # Variables for style args
         self.style_upload = {
             'width': '100%',
@@ -33,6 +55,7 @@ class Accessories:
                 size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
                 '''
         )
+
         self.inputs_text = dcc.Markdown(
             '''
                 ### Inputs
@@ -44,6 +67,12 @@ class Accessories:
                 
                 '''
         )
+
+        self.img_style = {'width': '100%',
+                          'height': '500px',
+                          'display': 'inline-block !important',
+                          'margin': 'auto !important'}
+
         self.input_boxes = [
             dcc.Markdown(
                 '''
@@ -66,17 +95,25 @@ class Accessories:
             dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
         ]
 
+        self.style_graph = {'display': 'inline-table',
+                            'width': '75%',
+                            'text-align': 'center'}
+
+        self.style_statistic = {'display': 'inline-table',
+                                'width': '75%',
+                                'text-align': 'left'}
+
     # Auxiliary function for parsing contents of the files
-    def parse_contents(self, contents, filename, date, input):
+    def parse_contents(self, contents, filename, date, input_dict_app):
         """
         Args:
-            contents (Input('upload-data', 'contents'): contents of the file containing the sample data (class weights and
+            contents (dash.dcc.Input.Input): contents of the file containing the sample data (class weights and
             corresponding grain sizes)
-            filename (State('upload-data', 'filename')): filename
-            date (State('upload-data', 'last_modified')):
-            input (dict): index parameters input by the user necessary to read and parse the contents of the file
+            filename (dash.dcc.State.State): filename
+            date (dash.dcc.State.State):
+            input_dict_app (dict): index parameters input by the user necessary to read and parse the contents of the file
         Returns:
-            Object of StatisticalAnalyzer and Div with reading messages
+            tuple of Object of StatisticalAnalyzer and Div with reading messages
         """
         content_type, content_string = contents.split(',')
 
@@ -90,39 +127,40 @@ class Accessories:
                 # Assume that the user uploaded an excel file
                 df = pd.read_excel(io.BytesIO(decoded), engine="openpyxl", header=None)
 
-            # clean dataset
+            # clean the dataset by catching only inputs indicated with the indexes
             dff = df.copy()
-            columns_to_get = [input["gs_clm"], input["cw_clm"]]
-            dff_gs = dff.iloc[input["header"]: input["header"] + input["n_rows"], columns_to_get]
+            columns_to_get = [input_dict_app["gs_clm"], input_dict_app["cw_clm"]]
+            dff_gs = dff.iloc[input_dict_app["header"]: input_dict_app["header"] + input_dict_app["n_rows"],
+                     columns_to_get]
             dff_gs.reset_index(inplace=True, drop=True)
             dff_gs = dff_gs.astype(float)
 
             # Get metadata from the dataframe
             # get sample name
             try:
-                samplename = dff.iat[input["index_sample_name"][0], input["index_sample_name"][1]]
+                samplename = dff.iat[input_dict_app["index_sample_name"][0], input_dict_app["index_sample_name"][1]]
             except:
                 samplename = None
                 pass
 
             # get sample date
             try:
-                sampledate = dff.iat[input["index_sample_date"][0], input["index_sample_date"][1]]
+                sampledate = dff.iat[input_dict_app["index_sample_date"][0], input_dict_app["index_sample_date"][1]]
             except:
                 sampledate = None
                 pass
 
             # get sample coordinates
             try:
-                lat = dff.iat[input["index_lat"][0], input["index_lat"][1]]
-                long = dff.iat[input["index_long"][0], input["index_long"][1]]
+                lat = dff.iat[input_dict_app["index_lat"][0], input_dict_app["index_lat"][1]]
+                long = dff.iat[input_dict_app["index_long"][0], input_dict_app["index_long"][1]]
             except:
                 lat, long = None, None
                 pass
 
             # get porosity
             try:
-                porosity = dff.iat[input["porosity"][0], input["porosity"][1]]
+                porosity = dff.iat[input_dict_app["porosity"][0], input_dict_app["porosity"][1]]
             except Exception as e:
                 porosity = None
                 print(e)
@@ -130,7 +168,7 @@ class Accessories:
 
             # get sf_porosity
             try:
-                sf_porosity = dff.iat[input["SF_porosity"][0], input["SF_porosity"][1]]
+                sf_porosity = dff.iat[input_dict_app["SF_porosity"][0], input_dict_app["SF_porosity"][1]]
             except Exception as e:
                 sf_porosity = 6.1  # default for rounded sediments
                 print(e)
@@ -142,7 +180,7 @@ class Accessories:
             dff_gs.rename(columns={dff_gs.columns[0]: "Grain Sizes [mm]", dff_gs.columns[1]: "Fraction Mass [g]"},
                           inplace=True)
 
-            analyzer = StatisticalAnalyzer(input=input, sieving_df=dff_gs, metadata=metadata)
+            analyzer = StatisticalAnalyzer(sieving_df=dff_gs, metadata=metadata)
 
         except Exception as e:
             print(e)
