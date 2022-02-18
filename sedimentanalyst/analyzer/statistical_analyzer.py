@@ -255,8 +255,29 @@ class StatisticalAnalyzer:
             boolean_filter = self.__interpolation_df["Cumulative (interpolated) "] == ds[n]
             ds_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
             self.statistics_df.at[n, "Value"] = ds_value
-
         pass
+
+    # TODO: compute FSF and fill the statistics df
+    # def __compute_fsf(self):
+    #     """
+    #     Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
+    #     and fills statistic dataframe
+    #     :return:
+    #     """
+    #     # type of characteristic grain size (cgs)
+    #     fine_gs = [0.5, 1, 2]
+    #
+    #     # assign each ds value to a line of the dataframe
+    #     for n in range(0, 3):
+    #         # name fine grain size
+    #         self.statistics_df.at[n, "Name"] = "FSF < {s} mm".format(s=fine_gs[n])
+    #
+    #         # assign value to fsf
+    #         boolean_filter = self.__interpolation_df["Grain size (interpolated) "] == fine_gs[n]
+    #         fsf_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
+    #         self.statistics_df.at[n, "Value"] = fsf_value
+    #         print()
+    #     pass
 
     def __uniformity_coefficient(self):
         """
