@@ -11,21 +11,49 @@ class StatisticalAnalyzer:
     """
     A class for computing statistical sedimentological parameters using sieving datasets (class weights
     and grain size).
+
+    Attributes:
+        dict_how2read (dict): dictionary containing the indexes of the relevant information in the excel files.
+        original_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
+        column the fraction mass that passes through the corresponding diameter.
+        cumulative_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
+        column the cumulative percentages (% in mass, in grams) that passes through the corresponding grain size diameters.
+        statistics_df (df): dataframe containing all the statistics of the sample, which includes:
+            d10, d16, d25, d30, d50, d60, d75, d84, d90, Mean Grain Site dm [mm], Geomterical mean grain size dg [mm],
+            Sorting Index, Fredle Index, Grain Size standard deviation, skewness, kurtosis, coefficient of uniformity Cu,
+            curvature coefficient Cc.
+        porosity_conductivity_df (df): dataframe containing the porosity estimators (estimated from the grain size
+        analysis) accoridng to different literature, as well as the corresponding hydraulic conductivity estimator for
+        each of the porosity values according to the Kozeny Carman Equation.
+        samplename (str): sample name
+        coords (tuple): x and y coordinates, in this order
+        porosity (float): porosity values set up by the user, possibly via alternative measurements, such as
+        with photogramic approaches.
+        sf_porosity (float): sphericity index. For rounded sediments it equals 6.10
+
+    Methods:
+        compute_cumulative_df (df): computes cumulative_df dataframe
+        compute_statistics_df (df): computes statistics_df dataframe
+        compute_porosity_conductivity_df (df): computes porosity_conductivity_df dataframe
+
+    Note:
+        See more on the determination of riverbed porosity from Freezecore samples via a Structure from Motion approach
+        at Seitz 2020.
+
     """
 
-    def __init__(self, input=None, sieving_df=None, metadata=None):
+    def __init__(self, sieving_df=None, metadata=None):
         """
         Initialize attributes and direct calling of class methods
         :param input: dict, dictionary containing the necessary indexes (rows and columns from the xlsx or csv files)
         for reading relevant sample information.
-        :param sieving_df: dataframe, containing the sieving results of a sediment sample (1st column containing grain
+        :param sieving_df: df, dataframe containing the sieving results of a sediment sample (1st column containing grain
         sizes and 2nd sample containing the class weights in grams.
         :metadata: list of single values as metadata, [samplename (str), sampledate (str), (lat (float), long (float)),
         porosity (float), sf_porosity (float)]
         """
 
         # Attributes
-        self.dict_how2read = input
         self.original_df = sieving_df
         self.cumulative_df = pd.DataFrame()
         self.statistics_df = pd.DataFrame()
