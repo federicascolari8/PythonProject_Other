@@ -14,7 +14,7 @@ class Accessories:
     extensive callouts and parsing of input contents.
 
     Attributes:
-        style-upload (dict): style information for a dropbox component
+        style_upload (dict): style information for a dropbox component
         intro_text (dash.dcc.Markdown.Markdown): markdown test for introducing the app
         inputs_text (dash.dcc.Markdown.Markdown): markdown text for explaining the inputs
         img_style(dict): style information for formatting images

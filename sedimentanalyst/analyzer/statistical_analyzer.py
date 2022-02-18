@@ -13,7 +13,6 @@ class StatisticalAnalyzer:
     and grain size).
 
     Attributes:
-        dict_how2read (dict): dictionary containing the indexes of the relevant information in the excel files.
         original_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
         column the fraction mass that passes through the corresponding diameter.
         cumulative_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
