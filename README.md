@@ -35,7 +35,7 @@ The input data consists of excel/csv files for each sediment sample. For correct
 
 # Link to app
 
-[![Image](assets/intro_w_image)](https://sedimentanalyst.herokuapp.com/)
+[![Image](assets/intro_w_image.jpg)](https://sedimentanalyst.herokuapp.com/)
 
 Checkout the [video tutorial](https://youtu.be/zXfN9-M12i0)
 
