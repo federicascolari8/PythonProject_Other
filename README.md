@@ -1,14 +1,14 @@
 # Sediment Analyst
 ![Inn River](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/river_inn.png "Sample Location")
 
-## Introduction
+## Welcome
 
-
-Sediment Analyst is a modularized Python package-to-be that enables sedimentological analyses. 
+Sediment Analyst is a modularized Python package that enables sedimentological analyses. 
 
 ![Sample Location](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/measuring_points.png "Sample Location")
 
 *Example of location of the collected samples. Ering, Germany*
+
 
 By using sieving datasets as input, Sediment Analyzer computes sediment statistics. The statistics computed are:
 - Sediment characteristics (d10, d16, d50, d84, d90, sorting index, mean grain size, etc. ). For more information see the documentation of the class StatisticalAnalyzer.
@@ -23,12 +23,21 @@ The used *Python* libraries are: *numpy*, *scipy*, *pathlib*, *matplotlib*, *ope
 
 Standard libraries: *re*, *locale*, *logging*, *glob*, *sys*, *os*, *math*
 
+Checkout the requirements.txt file for seeing the version requirements of the packages.
+
 ##Input Data
 
-The input data consist
+The input data consists of excel/csv files for each sediment sample. For correctly parsing the datasets checkout the tutorial below.
+
 
 # Package Structure
 ![Code UML](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/code_uml_sediment_analyst.png "Code UML")
+
+# Link to app
+
+[![Applink]([![Foo](https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/assets/intro_w_image.jpg)](http://google.com.au/))](https://sedimentanalyst.herokuapp.com/)
+
+Checkout the [video tutorial](https://youtu.be/zXfN9-M12i0)
 
 #Code description
 
