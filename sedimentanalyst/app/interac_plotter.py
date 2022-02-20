@@ -65,7 +65,7 @@ class InteractivePlotter:
 
         return fig
 
-    def plot_histogram(self, param, samples):
+    def plot_barchart(self, param, samples):
         """
         Method to outputs the results in a bar chart for the interactive comparison of the results
         :param param: statistical parameters selectable from the user
@@ -97,24 +97,6 @@ class InteractivePlotter:
                          linecolor='black', gridcolor='darkgrey')
 
         return fig
-
-    # def plot_histogram(self, param, samples):
-    #     params = self.df.columns[0:9].tolist()
-    #     fig = make_subplots(rows=3, cols=3, subplot_titles=params)
-    #     xpos = 1
-    #     ypos = 1
-    #     # I had to create this "for cycle" with xpos and ypos to avoid manually adding every trace one by one
-    #     for par in params:
-    #         fig.append_trace(go.Bar(x=samples, y=self.df[par]), ypos, xpos)
-    #         if xpos % 3 == 0:
-    #             xpos = 1
-    #             ypos += 1
-    #         else:
-    #             xpos += 1
-    #
-    #     fig.update_layout(title_text="Samples divided by parameter", showlegend=False)
-    #
-    #     return fig
 
     def plot_gsd(self, samples):
         """
@@ -154,3 +136,28 @@ class InteractivePlotter:
                          gridcolor='darkgrey')
 
         return fig
+
+    def plot_diameters(self, samples):
+        """
+        Method which plots the cumulative grain size distribution curve for all selected samples
+        :param samples: sample names
+        :return: fig
+        """
+        # filter samples given sample name
+        df = self.df[self.df["sample name"].isin(samples)]
+
+        x = df["sample name"].tolist()
+        fig = go.Figure()
+
+        diamsValuesPerSample = df.iloc[:, 4:13]
+
+        diamsTitle = df.columns[4:13].tolist()
+
+        #Enables proper view of the barchart with the overlay barmode
+        for n in range(8, -1, -1):
+            fig.add_trace(go.Bar(x=x, y=diamsValuesPerSample.iloc[:, n].tolist(), name=diamsTitle[n]))
+
+        fig.update_layout(barmode='overlay')
+
+        return fig
+

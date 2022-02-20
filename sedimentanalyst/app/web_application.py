@@ -79,11 +79,15 @@ app.layout = html.Div(
         html.Div(id='div-gsd'),
         html.Br(),
 
+        # diameters barchart
+        html.Div(id='div-diameters'),
+        html.Br(),
+
         # dropdown with type of statistics
         html.Div(id='div-stat-drop'),
 
-        # histogram
-        html.Div(id='div-histogram'),
+        # barchart
+        html.Div(id='div-barchart'),
     ])
 
 
@@ -204,6 +208,7 @@ def update_sample_id(n_clicks, data):  # n_clicks is mandatory even if not used
     Input('sample_id', 'value'),
     prevent_initial_call=True
 )
+
 def update_map(data, dict_to_get_proj, samples):
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
     int_plot = interac_plotter.InteractivePlotter(df)
@@ -235,13 +240,13 @@ def update_stat_drop(n_clicks, data):
 
 # Callback 7: for plotting/updating histogram of the statistic; uses the class InteractivePlotter
 @app.callback(
-    Output('div-histogram', 'children'),
+    Output('div-barchart', 'children'),
     State('stored-data', 'data'),
     Input('statistics_id', 'value'),
     Input('sample_id', 'value'),
     prevent_initial_call=True
 )
-def update_histogram(data, stat_value, samples):
+def update_barchart(data, stat_value, samples):
     # save into dataframe
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
 
@@ -251,13 +256,12 @@ def update_histogram(data, stat_value, samples):
     # filter samples given statistic
     df = df.iloc[:, 4:23]
     i_plotter = interac_plotter.InteractivePlotter(df)
-    fig = i_plotter.plot_histogram(param=stat_value, samples=samples)
+    fig = i_plotter.plot_barchart(param=stat_value, samples=samples)
     # fig.update_layout(transition_duration=500)
-    return dcc.Graph(id='output-histogram',
+    return dcc.Graph(id='output-barchart',
                      figure=fig,
                      style=acc.style_graph
                      )
-
 
 # Callback 8: for plotting/updating grain size distribution graph
 @app.callback(
@@ -277,6 +281,29 @@ def update_gsd(data, samples):
     fig = i_plotter_2.plot_gsd(samples)
 
     return dcc.Graph(id='gsd',
+                     figure=fig,
+                     style=acc.style_graph
+                     )
+
+# Callback 9: for plotting the diameters
+@app.callback(
+    Output('div-diameters', 'children'),
+    State('stored-data', 'data'),
+    Input('sample_id', 'value'),
+    prevent_initial_call=True
+)
+
+def update_diameters(data, samples):
+    # save into dataframe
+    df = pd.DataFrame(data=data['data'], columns=data['columns'])
+
+    # filter samples given sample name
+    df = df[df['sample name'].isin(samples)]
+
+    i_plotter_2 = interac_plotter.InteractivePlotter(df)
+    fig = i_plotter_2.plot_diameters(samples)
+
+    return dcc.Graph(id='diameters',
                      figure=fig,
                      style=acc.style_graph
                      )
