@@ -35,11 +35,11 @@ The input data consists of excel/csv files for each sediment sample. For correct
 
 # Link to app
 
-[![Applink]([![Foo](https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/assets/intro_w_image.jpg)](http://google.com.au/))](https://sedimentanalyst.herokuapp.com/)
+[![Image](assets/intro_w_image)](https://sedimentanalyst.herokuapp.com/)
 
 Checkout the [video tutorial](https://youtu.be/zXfN9-M12i0)
 
-#Code description
+# Code description
 
 ##config.py
 
