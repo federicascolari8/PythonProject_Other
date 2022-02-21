@@ -123,8 +123,7 @@ class InteractivePlotter:
         fig.update_layout(title_font_size=20,
                           legend_bordercolor='darkgrey')
 
-        # Plot's layout is modified to improve visuals
-
+        # the plot's layout is modified to improve visuals
         fig.update_xaxes(type='category', autorange="reversed",
                          showline=True, mirror=True,
                          ticks='outside', linewidth=2, title_font_size=14,
@@ -149,15 +148,22 @@ class InteractivePlotter:
         x = df["sample name"].tolist()
         fig = go.Figure()
 
-        diamsValuesPerSample = df.iloc[:, 4:13]
+        diams_values_per_sample = df.iloc[:, 4:13]
 
-        diamsTitle = df.columns[4:13].tolist()
+        diams_title = df.columns[4:13].tolist()
 
-        #Enables proper view of the barchart with the overlay barmode
+        # enables proper view of the barchart with the overlay barmode
         for n in range(8, -1, -1):
-            fig.add_trace(go.Bar(x=x, y=diamsValuesPerSample.iloc[:, n].tolist(), name=diamsTitle[n]))
+            fig.add_trace(go.Bar(x=x, y=diams_values_per_sample.iloc[:, n].tolist(), name=diams_title[n]))
 
-        fig.update_layout(barmode='overlay')
+        fig.update_layout(barmode='overlay', title="Overview of Diameters",
+                          title_font_size=20, legend_title="Diameters",
+                          legend_bordercolor='darkgrey')
+
+        fig.update_xaxes(title="Sample Name", linewidth=2, title_font_size=14,
+                         linecolor='black', gridcolor='darkgrey')
+
+        fig.update_yaxes(title="Diameter Size [mm]", linewidth=2, title_font_size=14,
+                         linecolor='black', gridcolor='darkgrey')
 
         return fig
-
