@@ -52,7 +52,9 @@ class Accessories:
                 visual sedimentological analyses. By inputting datasets of sieved class weights (see examples 
                 [here](https://github.com/federicascolari8/PythonProject/blob/main/templates/template-sample-file.xlsx)), Sediment
                 Analyst computes characteristic grain sizes (namely, d10, d16, d25, d30, d50, d60, d75, d84, d90), mean grain 
-                size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout:
+                size, geometrical mean grain size, porosity, and hydraulic conductivity estimators. Checkout our video 
+                [tutorial](https://youtu.be/zXfN9-M12i0).
+                
                 '''
         )
 
@@ -88,11 +90,11 @@ class Accessories:
                       value=16),
             dcc.Input(id="porosity", type="number", placeholder="porosity index", value=2.4),
             dcc.Input(id="SF_porosity", type="number", placeholder="SF_porosity index", value=2.5),
-            dcc.Input(id="index_lat", type="number", placeholder="latitute index", value=5.2),
+            dcc.Input(id="index_lat", type="number", placeholder="latitude index", value=5.2),
             dcc.Input(id="index_long", type="number", placeholder="longitude index", value=5.3),
             dcc.Input(id="index_sample_name", type="number", placeholder="sample name index", value=6.2),
             dcc.Input(id="index_sample_date", type="number", placeholder="sample date index", value=4.2),
-            dcc.Input(id="projection", type="text", placeholder="projection ex: epsg:3857", value="epsg:3857"),
+            dcc.Input(id="projection", type="text", placeholder="projection as epsg", value="epsg:3857"),
         ]
 
         self.style_graph = {'display': 'inline-table',
@@ -166,7 +168,7 @@ class Accessories:
 
         # get sf_porosity
         try:
-            sf_porosity = dff.iat[input_dict_app["SF_porosity"][0], input_dict_app["SF_porosity"][1]]
+            sf_porosity = float(dff.iat[input_dict_app["SF_porosity"][0], input_dict_app["SF_porosity"][1]])
         except:
             sf_porosity = 6.1  # default for rounded sediments
             pass
