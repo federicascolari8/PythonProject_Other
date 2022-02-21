@@ -58,6 +58,7 @@ class StatisticalAnalyzer:
         self.statistics_df = pd.DataFrame()
         self.__interpolation_df = pd.DataFrame()
         self.porosity_conductivity_df = pd.DataFrame()
+        self.__interpolation_fsf_df = pd.DataFrame
         self.samplename = metadata[0]
         self.sampledate = metadata[1]
         self.coords = metadata[2]
@@ -66,7 +67,7 @@ class StatisticalAnalyzer:
 
         # Methods
         self.compute_cumulative_df()
-        self.__compute_interp_df()
+        self.__compute_interp_dfs()
         self.compute_statistics_df()
         self.compute_porosity_conductivity_df()
 
@@ -120,6 +121,7 @@ class StatisticalAnalyzer:
         self.__kurtosis()
         self.__uniformity_coefficient()
         self.__curvature_coefficient()
+        # self.__compute_fsf()
 
         pass
 
@@ -258,26 +260,27 @@ class StatisticalAnalyzer:
         pass
 
     # TODO: compute FSF and fill the statistics df
-    # def __compute_fsf(self):
-    #     """
-    #     Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
-    #     and fills statistic dataframe
-    #     :return:
-    #     """
-    #     # type of characteristic grain size (cgs)
-    #     fine_gs = [0.5, 1, 2]
-    #
-    #     # assign each ds value to a line of the dataframe
-    #     for n in range(0, 3):
-    #         # name fine grain size
-    #         self.statistics_df.at[n, "Name"] = "FSF < {s} mm".format(s=fine_gs[n])
-    #
-    #         # assign value to fsf
-    #         boolean_filter = self.__interpolation_df["Grain size (interpolated) "] == fine_gs[n]
-    #         fsf_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
-    #         self.statistics_df.at[n, "Value"] = fsf_value
-    #         print()
-    #     pass
+    def __compute_fsf(self):
+        """
+        Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
+        and fills statistic dataframe
+        :return:
+        """
+        # type of characteristic grain size (cgs)
+        fine_gs = [0.5, 1, 2]
+
+        # assign each ds value to a line of the dataframe
+        for n in range(0, 3):
+            # name fine grain size
+            self.statistics_df.at[19+n, "Name"] = "FSF < {s} mm".format(s=fine_gs[n])
+
+            # assign value to fsf
+            inter_df = self.__interpolation_df
+            boolean_filter = self.__interpolation_df["Grain size (interpolated) "] == fine_gs[n]
+            df = self.__interpolation_df[boolean_filter.to_list()]
+            fsf_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
+            self.statistics_df.at[19+n, "Value"] = fsf_value
+        pass
 
     def __uniformity_coefficient(self):
         """
@@ -304,7 +307,7 @@ class StatisticalAnalyzer:
         self.statistics_df.at[18, "Value"] = d30 ** 2 / (d60 * d10)
         pass
 
-    def __compute_interp_df(self):
+    def __compute_interp_dfs(self):
         """
         Computes linearly interpolated grain sizes for several cumulative percentages (every 0.25%)
         :return:
@@ -315,11 +318,18 @@ class StatisticalAnalyzer:
 
         # estimate grain size linearly for a increase of 0.25% of cumulative percentage
         x_vals = np.linspace(0, 100, 401)
-        y_intepolated = np.interp(x_vals, x, y)
+        y_interpolated = np.interp(x_vals, x, y)
 
         # fill dataframe with results of interpolation
         self.__interpolation_df["Cumulative (interpolated) "] = x_vals
-        self.__interpolation_df["Grain size (interpolated) "] = y_intepolated
+        self.__interpolation_df["Grain size (interpolated) "] = y_interpolated
+
+        # estimate fsf
+        fsf_grains_to_find = [0.5, 1.0, 2.0]
+        fsf = np.interp(fsf_grains_to_find, y, x)  # axes get flipped to use the same function
+        self.__interpolation_fsf_df['FSA < 0.5 mm'] = 0
+        self.__interpolation_fsf_df['FSA < 1 mm'] = 9
+        self.__interpolation_fsf_df['FSA < 1 mm'] = 9
 
         pass
 
@@ -408,7 +418,10 @@ class StatisticalAnalyzer:
         """
         Set porosity value from the user into the summary statistics dataframe
         """
-        self.porosity_conductivity_df.at[4, "Porosity"] = self.porosity
+        try:
+            self.porosity_conductivity_df.at[4, "Porosity"] = self.porosity
+        except:
+            self.porosity_conductivity_df.at[4, "Porosity"] = np.nan
 
         pass
 
