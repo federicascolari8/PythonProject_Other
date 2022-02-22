@@ -37,19 +37,20 @@ def main():
         # call the class StatisticalAnalyzer
         analyzer = StatisticalAnalyzer(sieving_df=sieving_df, metadata=metadata)
 
+        print(analyzer.statistics_df)
         # print(analyzer.sampledate, analyzer.samplename, analyzer.coords)
 
         # append global dataframe
         df_global = append_global(obj=analyzer,
                                   df=df_global
                                   )
-        df_global.to_excel("outputs/global_dataframe.xlsx")
+        df_global.to_excel("global_dataframe.xlsx")
+
         # call the class StaticPlotter
         plotter = StaticPlotter(analyzer)
 
         # outputs the cumulative grain size distribution curve
         plotter.cum_plotter('outputs/' + file_name[8:-5] + '.png')
-
 
     pass
 
