@@ -2,15 +2,32 @@ from sedimentanalyst.analyzer.config import *
 
 
 class StaticPlotter:
+    """
+    A class for creating the static plots of the cumulative grain size distribution curves
+
+    Attributes:
+        analyzer (StatisticalAnalyzer): StatisticalAnalyzer object
+        cum_df
+        #TODO
+
+
+    Methods:
+        cum_plotter(output): Plots the cumulative grain size distribution curve for each sample
+    """
+
     def __init__(self, analyzer):
         self.actual_analyzer = analyzer
         self.cum_df = self.actual_analyzer.cumulative_df
 
     def cum_plotter(self, output):
         """
-        Method to outputs the cumulative grain size distribution curve and save it as an image
-        :param output: name of the image containing the outputs
-        :return: None
+        Method to output the cumulative grain size distribution curve and save it as an image
+
+        Args:
+             output (str): Name of the image containing the outputs
+
+        Returns:
+             None
         """
 
         fig, ax = plt.subplots(figsize=(8.0, 5.0))
@@ -33,11 +50,16 @@ class StaticPlotter:
         plt.savefig(output, dpi=200)
         plt.show()
 
+
     def __set_main_sec_axis(self, ax):
         """
         Private method that defines the main secondary axis
-        :param ax: main secondary axis
-        :return: None
+
+        Args:
+             ax (matplotlib.axes._subplots.AxesSubplot): AxesSubplot object defining the main
+
+        Returns:
+             None
         """
         # setting text and appearance of the various ticks
 
@@ -56,9 +78,14 @@ class StaticPlotter:
     def __set_min_sec_axis(self, ax2):
         """
         Private method defining the minor secondary axis
-        :param ax2: minor secondary axis
-        :return: None
+
+        Args:
+             ax2 (matplotlib.axes._subplots.AxesSubplot): AxesSubplot object defining the minor secondary axis
+
+        Returns:
+             None
         """
+
         # Secondary axis to outputs sediment classes
         categories = ['', 'fine', 'medium', 'coarse', 'fine', 'medium', 'coarse', '']
         ticks = [0.06, 0.2, 0.63, 2, 6, 20, 63, 250]
@@ -74,9 +101,14 @@ class StaticPlotter:
     def __set_axis_colour_and_format(self, ax):
         """
         Private method which sets the outputs properties
-        :param ax: main secondary axis
-        :return: None
+
+        Args:
+             ax (matplotlib.axes._subplots.AxesSubplot): AxesSubplot object defining the main secondary axis
+
+        Returns:
+             None
         """
+
         a = [0.06, 0.20, 0.63, 2.00, 6.00, 20.00, 63.00, 250]
         b = np.arange(0, 110, 10)
         ax.axvline(0.1, color='black', alpha=0.3, linewidth=0.5)

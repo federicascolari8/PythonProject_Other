@@ -8,16 +8,36 @@ from sedimentanalyst.app.appconfig import *
 
 
 class InteractivePlotter:
+    """
+    A class for creating interactive plots for the comparison of the statistical analysis results
+
+    Attributes:
+        df (pandas.core.frame.DataFrame): DataFrame containing the information from the statistical analysis
+
+
+    Methods:
+        convert_coordinates(df, projection): Transforms the coordinates of a given projection to degrees
+        create_map(df, projection='epsg:3857', samples=None): Creates a scatter map
+        plot_barchart(param, samples): Plots the user-selected parameter for all samples in a bar chart
+        plot_gsd(samples): Plots the cumulative grain size distribution curve for all samples using a line chart
+        plot_diameters(samples): Plots the calculated sediment diameters in a bar chart for all samples
+    """
+
     def __init__(self, df):
         self.df = df
 
     def convert_coordinates(self, df, projection):
         """
-        Method which transforms the coordinates of a give projection to degrees
-        :param df: dataframe on which the coordinate transformation is applied
-        :param projection: name of the initial projection
-        :return: df
+        Method which transforms the coordinates of a give projection to degrees.
+
+        Args:
+            df (pandas.core.frame.DataFrame): DataFrame on which the coordinate transformation is applied
+            projection (str): Name of the initial projection
+
+        Returns:
+            df (pandas.core.frame.DataFrame): DataFrame object on which the coordinate transformation has been applied
         """
+
         # import projections
         inproj = CRS.from_string(projection)  # Pseudo mercator
         outproj = CRS.from_string('epsg:4326')  # WGS 83 degrees
@@ -36,11 +56,16 @@ class InteractivePlotter:
 
     def create_map(self, df, projection='epsg:3857', samples=None):
         """
-        create a scatter map based on the dataframe
-        :param df: dataframe on which the coordinate transformation is applied
-        :param projection: name of the initial projection
-        :param samples: sample names
-        :return: fig
+        Creates a scatter map based on the DataFrame
+
+        Args:
+            df (DataFrame): DataFrame on which the coordinate transformation has been applied
+            projection (str): Name of the initial projection
+            samples (list): Names of the collected samples
+
+        Returns:
+            fig (plotly.graph_objects.Figure): Figure object that allows the visualization of the Open
+                                               Street map of the area where the samples were collected
         """
 
         # convert coordinates to input projection
@@ -67,10 +92,16 @@ class InteractivePlotter:
 
     def plot_barchart(self, param, samples):
         """
-        Method to outputs the results in a bar chart for the interactive comparison of the results
-        :param param: statistical parameters selectable from the user
-        :param samples: sample names
-        :return: fig
+        Method that outputs the results in a bar chart for the interactive comparison of the results.
+
+        Args:
+            param (str): Statistical parameters selectable from the user
+            samples (list): Names of the collected samples
+
+        Returns:
+            fig (plotly.graph_objects.Figure): Figure object that allows the visualization of the plot of a
+                                               bar chart in which the statistical parameter selected by the
+                                               user is shown for each selected sample
         """
 
         # Create a new dataframe, with two columns:
@@ -100,10 +131,17 @@ class InteractivePlotter:
 
     def plot_gsd(self, samples):
         """
-        Method which plots the cumulative grain size distribution curve for all selected samples
-        :param samples: sample names
-        :return: fig
+        Method which plots the cumulative grain size distribution curve for all selected samples.
+
+        Args:
+             samples (list): Names of the collected samples
+
+         Returns:
+             fig (plotly.graph_objects.Figure): Figure object enabling the visualization of the plot
+                                                of the grain size distribution curve for all collected
+                                                sample by using a line chart
         """
+
         # filter samples given sample name
         df = self.df[self.df["sample name"].isin(samples)]
 
@@ -138,10 +176,17 @@ class InteractivePlotter:
 
     def plot_diameters(self, samples):
         """
-        Method which plots the cumulative grain size distribution curve for all selected samples
-        :param samples: sample names
-        :return: fig
+        Method which plots the calculated sediment diameters in a bar chart for all selected samples.
+
+        Args:
+             samples (list): Names of the collected samples
+
+         Returns:
+             fig (plotly.graph_objects.Figure): Figure object allowing to visualize the calculated diameters
+                                                (d10, d16, d25, d30, d50, d60, d75, d84 and d90) for all the
+                                                collected samples
         """
+
         # filter samples given sample name
         df = self.df[self.df["sample name"].isin(samples)]
 

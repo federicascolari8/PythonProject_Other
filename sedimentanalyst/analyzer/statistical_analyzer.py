@@ -16,18 +16,18 @@ class StatisticalAnalyzer:
         original_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
         column the fraction mass that passes through the corresponding diameter.
         cumulative_df (df): dataframe containing in the first column the grain sizes diameters (in mm) and in the second
-        column the cumulative percentages (% in mass, in grams) that passes through the corresponding grain size diameters.
+                            column the cumulative percentages (% in mass, in grams) that passes through the corresponding grain size diameters.
         statistics_df (df): dataframe containing all the statistics of the sample, which includes:
-            d10, d16, d25, d30, d50, d60, d75, d84, d90, Mean Grain Site dm [mm], Geomterical mean grain size dg [mm],
-            Sorting Index, Fredle Index, Grain Size standard deviation, skewness, kurtosis, coefficient of uniformity Cu,
-            curvature coefficient Cc.
+                            d10, d16, d25, d30, d50, d60, d75, d84, d90, Mean Grain Site dm [mm], Geometrical mean grain size dg [mm],
+                            Sorting Index, Fredle Index, Grain Size standard deviation, skewness, kurtosis, coefficient of uniformity Cu,
+                            curvature coefficient Cc.
         porosity_conductivity_df (df): dataframe containing the porosity estimators (estimated from the grain size
-        analysis) accoridng to different literature, as well as the corresponding hydraulic conductivity estimator for
-        each of the porosity values according to the Kozeny Carman Equation.
+                                       analysis) according to different literature, as well as the corresponding hydraulic conductivity estimator for
+                                       each of the porosity values according to the Kozeny Carman Equation.
         samplename (str): sample name
         coords (tuple): x and y coordinates, in this order
         porosity (float): porosity values set up by the user, possibly via alternative measurements, such as
-        with photogramic approaches.
+                          with photogramic approaches.
         sf_porosity (float): sphericity index. For rounded sediments it equals 6.10
 
     Methods:
@@ -43,13 +43,15 @@ class StatisticalAnalyzer:
 
     def __init__(self, sieving_df=None, metadata=None):
         """
-        Initialize attributes and direct calling of class methods
-        :param input: dict, dictionary containing the necessary indexes (rows and columns from the xlsx or csv files)
-        for reading relevant sample information.
-        :param sieving_df: df, dataframe containing the sieving results of a sediment sample (1st column containing grain
-        sizes and 2nd sample containing the class weights in grams.
-        :metadata: list of single values as metadata, [samplename (str), sampledate (str), (lat (float), long (float)),
-        porosity (float), sf_porosity (float)]
+        Initializes attributes and direct calling of class methods
+
+        Args:
+            input: dict, dictionary containing the necessary indexes (rows and columns from the xlsx or csv files)
+                   for reading relevant sample information.
+            sieving_df: df, dataframe containing the sieving results of a sediment sample (1st column containing grain
+                        sizes and 2nd sample containing the class weights in grams.
+            metadata: list of single values as metadata, [samplename (str), sampledate (str), (lat (float), long (float)),
+                      porosity (float), sf_porosity (float)]
         """
 
         # Attributes
@@ -75,7 +77,8 @@ class StatisticalAnalyzer:
         Compute two new columns in the grain size dataframe, which are
         + Percentage Fraction [%] and
         + Cumulative Percentage [%]
-        :return: None
+
+        Returns: None
         """
         # initialize cumulative dataframe
         self.cumulative_df = self.cumulative_df.append(self.original_df)
@@ -101,8 +104,9 @@ class StatisticalAnalyzer:
 
     def compute_statistics_df(self):
         """
-        Fill a dataframe (self.statistics_df) with all relevant statistics by calling smaller private methods
-        :return:
+        Fills a dataframe (self.statistics_df) with all relevant statistics by calling smaller private methods
+
+        Returns:
         """
         # create columns to same statistic name and value
         self.statistics_df["Name"] = np.nan
@@ -125,8 +129,9 @@ class StatisticalAnalyzer:
 
     def __mean_grain_size_dm(self):
         """
-        Compute mean grain size and fills it in the statistics dataframe (self.statistics_df)
-        return:
+        Computes mean grain size and fills it in the statistics dataframe (self.statistics_df)
+
+        Returns:
         """
         self.statistics_df.at[9, "Name"] = "Mean Grain Size dm [mm]"
         mean_gsdm = 0.0025 * self.__interpolation_df["Grain size (interpolated) "].sum()
@@ -135,9 +140,10 @@ class StatisticalAnalyzer:
 
     def __geometrical_mean_dg(self):
         """
-        Compute Geometrical mean dg (simplified) by Bunte & Abt 2001 and
+        Computes Geometrical mean dg (simplified) by Bunte & Abt 2001 and
         fill statistics dataframe
-        return:
+
+        Returns:
         """
         self.statistics_df.at[10, "Name"] = "Geometrical mean dg [mm]"
 
@@ -149,12 +155,13 @@ class StatisticalAnalyzer:
 
     def __sorting_index_1_ds(self):
         """
-        Compute Sorting Index by Bunte & Abt 2001 sqrt(d84/d16) and
+        Computes Sorting Index by Bunte & Abt 2001 sqrt(d84/d16) and
         fill statistics dataframe.
 
         Note: the Sorting Index (SO) is an indicator of available pore space. The higher the SO, the less is the
         available pore space.
-        :return:
+
+        Returns:
         """
         self.statistics_df.at[11, "Name"] = "Sorting Index 1 ds"
 
@@ -171,7 +178,8 @@ class StatisticalAnalyzer:
 
         Note: the Fredle Index (FI) is an indicator of available pore space. The higher the FI, the higher is the
         available pore space.
-        :return:
+
+        Returns:
         """
         self.statistics_df.at[12, "Name"] = "Fredle - Index"
         fredle_index = self.statistics_df.at[10, "Value"] / self.statistics_df.at[11, "Value"]
@@ -180,11 +188,12 @@ class StatisticalAnalyzer:
 
     def __standard_deviation(self):
         """
-        Compute grain size standard deviation and fills statistic dataframe.
+        Computes grain size standard deviation and fills statistic dataframe.
 
         Note: Standard deviation is a measure of the spread and scatter of these sizes around the average or mean
         grain size (Baiyegunhi, C., Liu, K., & Gwavava, O. , 2017).
-        :return:
+
+        Returns:
         """
         self.statistics_df.at[13, "Name"] = "Grain Size std"
         grain_size_std = np.nanstd(self.__interpolation_df["Grain size (interpolated) "].to_numpy())
@@ -194,8 +203,9 @@ class StatisticalAnalyzer:
 
     def __geometric_standard_deviation(self):
         """
-        Compute geometric_standard_deviation by Frings 2001 et. al.
-        :return:
+        Computes geometric_standard_deviation by Frings 2001 et. al.
+
+        Returns:
         """
         self.statistics_df.at[14, "Name"] = "Geometric Standard Deviation"
 
@@ -216,8 +226,9 @@ class StatisticalAnalyzer:
 
     def __skewness(self):
         """
-        Compute skewness of grain sizes
-        :return:
+        Computes skewness of grain sizes
+
+        Returns:
         """
         self.statistics_df.at[15, "Name"] = "Skewness"
 
@@ -227,8 +238,9 @@ class StatisticalAnalyzer:
 
     def __kurtosis(self):
         """
-        Compute kurtosis of grain sizes
-        :return:
+        Computes kurtosis of grain sizes
+
+        Returns:
         """
         self.statistics_df.at[16, "Name"] = "Kurtosis"
 
@@ -238,9 +250,10 @@ class StatisticalAnalyzer:
 
     def __compute_ds(self):
         """
-        Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
+        Computes characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
         and fills statistic dataframe
-        :return:
+
+        Returns:
         """
         # type of characteristic grain size (cgs)
         ds = [10, 16, 25, 30, 50,
@@ -260,9 +273,10 @@ class StatisticalAnalyzer:
     # TODO: compute FSF and fill the statistics df
     # def __compute_fsf(self):
     #     """
-    #     Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
+    #     Computes characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
     #     and fills statistic dataframe
-    #     :return:
+    #
+    #     Returns:
     #     """
     #     # type of characteristic grain size (cgs)
     #     fine_gs = [0.5, 1, 2]
@@ -282,7 +296,8 @@ class StatisticalAnalyzer:
     def __uniformity_coefficient(self):
         """
         Computes uniformity coefficient and fills statistics dataframe
-        :return:
+
+        Returns:
         """
         self.statistics_df.at[17, "Name"] = "Coefficient of uniformity - Cu"
 
@@ -294,7 +309,8 @@ class StatisticalAnalyzer:
     def __curvature_coefficient(self):
         """
         Computes curvature coefficient and fills statistics dataframe
-        :return:
+
+        Returns:
         """
         self.statistics_df.at[18, "Name"] = "Curvature coefficient - Cc"
 
@@ -307,7 +323,8 @@ class StatisticalAnalyzer:
     def __compute_interp_df(self):
         """
         Computes linearly interpolated grain sizes for several cumulative percentages (every 0.25%)
-        :return:
+
+        Returns:
         """
         # extract data from sample
         y = np.flip(np.array(self.cumulative_df["Grain Sizes [mm]"]))
@@ -327,7 +344,8 @@ class StatisticalAnalyzer:
         """
         Compute porosity predictors and corresponding hydraulic conductivities (for each estimated porosity
         value)
-        :return:
+
+        Returns:
         """
         # create columns to same statistic name and value
         self.porosity_conductivity_df["Name"] = np.nan
@@ -351,7 +369,8 @@ class StatisticalAnalyzer:
     def __porosity_name(self):
         """
         Create columns the porosity estimators according to available literature
-        :return:
+
+        Returns:
         """
         authors = ["Carling and Reader (1982)",
                    "Wu and Wang (2006)",
@@ -366,7 +385,8 @@ class StatisticalAnalyzer:
     def __porosity_carling(self):
         """
         Calculates porosity estimator according to Carling & Reader (1982)
-        :return:
+
+        Returns:
         """
         d50 = self.statistics_df.at[4, "Value"]
         carling = -0.0333 + (0.4665 / ((1000 * d50 / 1000) ** 0.21))
@@ -376,7 +396,8 @@ class StatisticalAnalyzer:
     def __porosity_wu(self):
         """
         Calculates porosity estimator according to Wu and Wang (2006)
-        :return:
+
+        Returns:
         """
         d50 = self.statistics_df.at[4, "Value"]
         wu = 0.13 + (0.21 / ((1000 * d50 / 1000 + 0.002) ** 0.21))
@@ -385,8 +406,9 @@ class StatisticalAnalyzer:
 
     def __porosity_wooster(self):
         """
-           Calculates porosity estimator accoridng to Wooster et al. (2008)
-           :return:
+           Calculates porosity estimator according to Wooster et al. (2008)
+
+           Returns:
         """
         geometric_std = self.statistics_df.at[14, "Value"]
         wooster = 0.621 * np.exp(-0.457 * geometric_std)
@@ -395,8 +417,9 @@ class StatisticalAnalyzer:
 
     def __porosity_frings(self):
         """
-        Calculates porosity estimator accoridng to Frings et al. (2011)
-        :return:
+        Calculates porosity estimator according to Frings et al. (2011)
+
+        Returns:
         """
         geometric_std = self.statistics_df.at[14, "Value"]
         cumulative_5mm = self.cumulative_df.at[9, "Cumulative Percentage [%]"] / 100
@@ -415,12 +438,14 @@ class StatisticalAnalyzer:
     def print_excel(self, file_name="statistics.xlsx"):
         #TODO: set up the directory to print excel
         """
-        Print all attribute dataframes into excel sheet
-        output is saved into local folder "outputs"
-        :param file_name: path to save the file
-        :return:
-        """
+        Print all attribute dataframes into excel sheet output is saved
+        into local folder "outputs"
 
+        Args:
+            file_name: Path to save the file
+
+        Returns:
+        """
         # Creating Excel Writer Object from Pandas
         wb = openpyxl.Workbook()
         wb.save(file_name)
@@ -432,9 +457,10 @@ class StatisticalAnalyzer:
 
     def __compute_kfs(self):
         """
-        Compute hydraulic conductivity values based on porosity from the user input
+        Computes hydraulic conductivity values based on porosity from the user input
         and porosity predictions
-        :return:
+
+        Returns:
         """
 
         self.porosity_conductivity_df["Corresponding kf [m/s]"] = np.nan
@@ -447,9 +473,13 @@ class StatisticalAnalyzer:
 
     def __kozeny_carman(self, porosity=np.nan):
         """
-        Compute hydraulic conductivity according to the Kozeny Carman Equation
-        :param porosity: sample porosity
-        :return: sample hydraulic conductivity [m\s]
+        Computes the hydraulic conductivity according to the Kozeny Carman Equation
+
+        Args:
+             porosity: Sample porosity
+
+        Returns:
+             kozeny_carman_kf: Sample hydraulic conductivity [m\s]
         """
         kozeny_df = pd.DataFrame().append(self.cumulative_df)
         kozeny_df["D_ave_i [cm]"] = ((kozeny_df["Grain Sizes [mm]"].shift(1, fill_value=0) / 10) ** 0.404) * (

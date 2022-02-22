@@ -145,21 +145,21 @@ Transforms the coordinates of a give projection in degrees.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
-|`df`| ?  | Dataframe on which the coordinate transformation is applied. |
+|`df`| DataFrame  | DataFrame on which the coordinate transformation is applied. |
 |`projection`| STR  | Name of the initial projection. |
 
-**return:** df (TYPE MISSING)
+**return:** df (DataFrame)
 
 ### `create_map()`
 Creates a scatter map based on the data contained in the dataframe.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
-|`df`| ?  | Dataframe on which the coordinate transformation is applied. |
+|`df`| DataFrame  | DataFrame on which the coordinate transformation is applied. |
 |`projection`| STR  | Name of the initial projection. |
 |`samples`| LIST  | Names of the samples. |
 
-**return:** fig (TYPE MISSING)
+**return:** fig (Figure)
 
 ### `plot_histogram()`
 
@@ -170,7 +170,7 @@ Plots the results in a bar chart based on the statistical parameters selected by
 |`param`| STR  | Parameters among which the user can choose for the results visualization. |
 |`samples`| LIST  | Names of the samples. |
 
-**return:** fig (TYPE MISSING)
+**return:** fig (Figure)
 
 ### `plot_gsd()`
 
@@ -180,10 +180,19 @@ Plots the cumulative grain size distribution curve for all selected samples.
 |-----------------|------|-------------|
 |`samples`| LIST  | Names of the samples. |
 
-**return:** fig (TYPE MISSING)
+**return:** fig (Figure)
 
 <br/>
 
-##web_application.py
+### `plot_diameters()`
+
+Plots the calculated sediment diameters in a bar chart for all selected samples.
+
+| Input argument | Type | Description |
+|-----------------|------|-------------|
+|`samples`| LIST  | Names of the samples. |
+
+**return:** fig (Figure)
+
 
 
