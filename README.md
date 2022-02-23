@@ -3,10 +3,12 @@
 
 ## Welcome
 
-Sediment Analyst is a modularized Python package that enables sedimentological analyses. By using sieving datasets as input, Sediment Analyst computes sediment statistics. FOr a complete list of computed statistics see section below (*Outputs*). For using our app, please watch our video tutorial [here](https://youtu.be/zXfN9-M12i0).
+Sediment Analyst is a modularized Python package that enables sedimentological analyses. By using sieving datasets as input, Sediment Analyst computes sediment statistics. For a complete list of computed statistics see section below (*Outputs*). For using our app, please watch our video tutorial [here](https://youtu.be/zXfN9-M12i0).
 
 
 ## Requirements
+
+Python > 3.0 is required.
 
 The used *Python* libraries are: *numpy*, *scipy*, *pathlib*, *matplotlib*, *openpyxl*, *pandas*, *seaborn*, *dash*, *pyproj*, *plotly*.
 
@@ -20,7 +22,16 @@ Important! Checkout the ```requirements.txt``` file for the version requirements
 
 The input data for sedimentanalyst consists of excel/csv files for each sediment sample. Accepted extensions are therefore ```.csv``` and ```.xlsx```. 
 
-For runing the code without the GUI, change the input parameters in the ```config.py``` and run ```main.py``` in the module *analyzer*. Please note that the plots provided in the *analyzer* module are static (not interactive plots). These may be useful for reports and single sediment sample analyses. 
+Use Sediment Analyst locally by cloning this repository or online with our app. Checkout:
+
+### Clone the repository
+
+    $ git clone xxxxxx
+
+For runing the code, change the input parameters in the ```config.py``` and run ```main.py``` in the module *analyzer*. Please note that the plots provided in the *analyzer* module are static (not interactive plots). These may be useful for reports and single sediment sample analyses. 
+
+
+### Access app
 
 Sediment Analyst features a novel app for enabling interactive analyses. The app can be hosted locally if you run  ```web_application.py``` in the *app* module. Click in the link provided by your console (the link is similar to http://000.0.0.0:0000/). We provide a full video [tutorial](https://youtu.be/zXfN9-M12i0) on how you can correctly input where index information so that Sediment Analyst can parse your data files, in case you are not using our template as input file.
 
