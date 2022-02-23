@@ -6,7 +6,7 @@
 Sediment Analyst is a modularized Python package that enables sedimentological analyses. By using sieving datasets as input, Sediment Analyst computes sediment statistics. FOr a complete list of computed statistics see section below (*Outputs*). For using our app, please watch our video tutorial [here](https://youtu.be/zXfN9-M12i0).
 
 
-# Requirements
+## Requirements
 
 The used *Python* libraries are: *numpy*, *scipy*, *pathlib*, *matplotlib*, *openpyxl*, *pandas*, *seaborn*, *dash*, *pyproj*, *plotly*.
 
@@ -55,12 +55,12 @@ Sediment Analyst computes the following:
  *For more information see the documentation of the class StatisticalAnalyzer.*
 
 
-# Package Structure
+## Package Structure
 Sediment Analyst is structured in two Python modules: *analyzer* and *app*. The app module imports the *analyzer* module for computed sediment statistics and for using utils.
 ![Code UML](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/code_uml_sediment_analyst.png "Code UML")
 
 
-# Code description
+## Code description
 
 ##config.py
 
