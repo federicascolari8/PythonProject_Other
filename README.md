@@ -3,41 +3,64 @@
 
 ## Welcome
 
-Sediment Analyst is a modularized Python package that enables sedimentological analyses. 
+Sediment Analyst is a modularized Python package that enables sedimentological analyses. By using sieving datasets as input, Sediment Analyst computes sediment statistics. FOr a complete list of computed statistics see section below (*Outputs*). For using our GUI, please watch our video tutorial [here]().
 
-![Sample Location](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/measuring_points.png "Sample Location")
-
-*Example of location of the collected samples. Ering, Germany*
-
-
-By using sieving datasets as input, Sediment Analyzer computes sediment statistics. The statistics computed are:
-- Sediment characteristics (d10, d16, d50, d84, d90, sorting index, mean grain size, etc. ). For more information see the documentation of the class StatisticalAnalyzer.
-- Porosity predictors based on available Literature (e.g., Carling & Reader).
-- Hydraulic conductivity estimators based on the [Kozeny-Carman Equation](https://cdnsciencepub.com/doi/abs/10.1139/t03-013).
 
 # Requirements
 
 ##Libraries
 
-The used *Python* libraries are: *numpy*, *scipy*, *pathlib*, *matplotlib*, *openpyxl*, *pandas*, *seaborn*, *dash*, *pyproj*, *plotly.express*.
+The used *Python* libraries are: *numpy*, *scipy*, *pathlib*, *matplotlib*, *openpyxl*, *pandas*, *seaborn*, *dash*, *pyproj*, *plotly*.
 
-Standard libraries: *re*, *locale*, *logging*, *glob*, *sys*, *os*, *math*
+Standard libraries include: *re*, *locale*, *logging*, *glob*, *sys*, *os*, *math*
 
-Checkout the requirements.txt file for seeing the version requirements of the packages.
-
-##Input Data
-
-The input data consists of excel/csv files for each sediment sample. For correctly parsing the datasets checkout the tutorial below.
+Important! Checkout the ```requirements.txt``` file for the version requirements of the packages.
 
 
-# Package Structure
-![Code UML](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/code_uml_sediment_analyst.png "Code UML")
 
-# Link to app
+## Running the Codes and preparing Inputs
+
+The input data for sedimentanalyst consists of excel/csv files for each sediment sample. Accepted extensions are therefore ```.csv``` and ```.xlsx```. 
+
+For runing the code without the GUI, change the input parameters in the ```config.py``` and run ```main.py``` in the module *analyzer*. Please note that the plots provided in the *analyzer* module are static (not interactive plots). These may be useful for reports and single sediment sample analyses. 
+
+Sediment Analyst features a novel app for enabling interactive analyses. The app can be hosted locally if you run  ```web_application.py``` in the *app* module. Click in the link provided by your console (the link is similar to http://000.0.0.0:0000/). We provide a full video [tutorial](https://youtu.be/zXfN9-M12i0) on how you can correctly input where index information so that Sediment Analyst can parse your data files, in case you are not using our template as input file.
+
+The app can be also accessed [here](https://sedimentanalyst.herokuapp.com), which runs with a [heroku](https://www.heroku.com/) server. Note that here there is a maximum limit of 500 MB for loading in the app. For inputing very large datasets (> 500 MB) we recommend to use the app locally. 
 
 [![Image](assets/intro_w_image.jpg)](https://sedimentanalyst.herokuapp.com/)
 
-Checkout the [video tutorial](https://youtu.be/zXfN9-M12i0)
+
+## Outputs and Capabilities
+
+Sediment Analyst computes the following:
+* A summary of sediment characteristics, which can be exported as csv:
+    * d10, d16, d25, d30, d50, d84, d90;
+    * Mean grain size, geometric mean grain size, grain size standard deviation, geometric standard deviation;
+    * Sorting index, Fredle index
+    * Skewness and kurtosis 
+    * Coefficient of uniformity, curvature coefficient;
+    * Porosity estimators for different literature:
+        * Carling and Reader (1982)
+        * Wu and Wang (2006)
+        * Wooster et al. (2008)
+        * Frings et al. (2011)
+    * hydraulic conductivity estimators computed with the [Kozeny-Carman Equation](https://link.springer.com/content/pdf/10.1007%2F978-3-642-40872-4_1995-1.pdf). Hydraulic Conductivity (kf) is computed in m/s with each of the above-mentioned computed porosity values.
+    * Cumulative percentages according to the Wentworth scale.
+ * Cumulative grain size distribution curves, which are available as:
+    * static plots per sample with the *analyzer* module, or:
+    * interactive plots with user-selected samples using the *app* module.
+ * Only in the app:
+    * Bar chart of statistics
+    * Interactive map listing sample information (optional, is generated when latitude (y) and longitude (x) values are available).
+ 
+ *For more information see the documentation of the class StatisticalAnalyzer.*
+
+
+# Package Structure
+Sediment Analyst is structured in two Python modules: *analyzer* and *app*. The app module imports the *analyzer* module for computed sediment statistics and for using utils.
+![Code UML](https://github.com/federicascolari8/PythonProject_Other/raw/main/assets/code_uml_sediment_analyst.png "Code UML")
+
 
 # Code description
 
