@@ -55,7 +55,7 @@ Sediment Analyst computes the following:
         * [Wooster et al. (2008)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2006WR005815): recommended for gravel-beds with geometric standard deviation between 0.004 m and 0.018 m.
         * [Frings et al. (2011)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2010WR009690)
     * hydraulic conductivity estimators computed with the [Kozeny-Carman Equation](https://link.springer.com/content/pdf/10.1007%2F978-3-642-40872-4_1995-1.pdf). Hydraulic Conductivity (kf) is computed in m/s with each of the above-mentioned computed porosity values.
-    * Cumulative percentages according to the Wentworth scale.
+    * Cumulative percentages according to the [Wentworth scale](https://www.planetary.org/space-images/wentworth-1922-grain-size).
  * Cumulative grain size distribution curves, which are available as:
     * static plots per sample with the *analyzer* module, or:
     * interactive plots with user-selected samples using the *app* module.
