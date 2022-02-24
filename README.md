@@ -28,7 +28,7 @@ Use Sediment Analyst locally by cloning this repository or online with our app. 
 
     $ git clone xxxxxx
 
-For runing the code, change the input parameters in the ```config.py``` and run ```main.py``` in the module *analyzer*. Please note that the plots provided in the *analyzer* module are static (not interactive plots). These may be useful for reports and single sediment sample analyses. 
+For runing the code in your computer, clone this repository and make sure to install the necessary parackages (chekout the ```requirements.txt``` file). Change the input parameters in the ```config.py``` and run ```main.py``` in the module *analyzer*. Please note that the plots provided in the *analyzer* module are static (not interactive plots). These may be useful for reports and single sediment sample analyses. 
 
 
 Sediment Analyst features a novel app for enabling interactive analyses. The app can be hosted locally if you run  ```web_application.py``` in the *app* module. Click in the link provided by your console (the link is similar to http://000.0.0.0:0000/). We provide a full video [tutorial](https://youtu.be/zXfN9-M12i0) on how you can correctly input where index information so that Sediment Analyst can parse your data files, in case you are not using our template as input file.
