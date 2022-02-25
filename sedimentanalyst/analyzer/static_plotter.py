@@ -6,10 +6,9 @@ class StaticPlotter:
     A class for creating the static plots of the cumulative grain size distribution curves
 
     Attributes:
-        analyzer (StatisticalAnalyzer): StatisticalAnalyzer object
-        cum_df
-        #TODO
-
+        analyzer (StatisticalAnalyzer): StatisticalAnalyzer object containing all the computed sample statistics.
+                                        For more information check the Class StatisticalAnalyzer
+        cum_df: DataFrame containing the Grain Sizes [mm] and the corresponding Cumulative Percentage [%]
 
     Methods:
         cum_plotter(output): Plots the cumulative grain size distribution curve for each sample
@@ -49,7 +48,6 @@ class StaticPlotter:
         # figure is saved
         plt.savefig(output, dpi=200)
         plt.show()
-
 
     def __set_main_sec_axis(self, ax):
         """

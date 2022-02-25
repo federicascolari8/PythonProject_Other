@@ -273,27 +273,27 @@ class StatisticalAnalyzer:
         pass
 
 
-    def __compute_fsf(self):
-        """
-        Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
-        and fills statistic dataframe
-        :return:
-        """
-        # type of characteristic grain size (cgs)
-        fine_gs = [0.5, 1, 2]
-
-        # assign each ds value to a line of the dataframe
-        for n in range(0, 3):
-            # name fine grain size
-            self.statistics_df.at[19+n, "Name"] = "FSF < {s} mm".format(s=fine_gs[n])
-
-            # assign value to fsf
-            inter_df = self.__interpolation_df
-            boolean_filter = self.__interpolation_df["Grain size (interpolated) "] == fine_gs[n]
-            df = self.__interpolation_df[boolean_filter.to_list()]
-            fsf_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
-            self.statistics_df.at[19+n, "Value"] = fsf_value
-        pass
+    # def __compute_fsf(self):
+    #     """
+    #     Compute characteristic grain sizes (d10, d16, d25, d30, d50, d60, d75, d84, d90)
+    #     and fills statistic dataframe
+    #     :return:
+    #     """
+    #     # type of characteristic grain size (cgs)
+    #     fine_gs = [0.5, 1, 2]
+    #
+    #     # assign each ds value to a line of the dataframe
+    #     for n in range(0, 3):
+    #         # name fine grain size
+    #         self.statistics_df.at[19+n, "Name"] = "FSF < {s} mm".format(s=fine_gs[n])
+    #
+    #         # assign value to fsf
+    #         inter_df = self.__interpolation_df
+    #         boolean_filter = self.__interpolation_df["Grain size (interpolated) "] == fine_gs[n]
+    #         df = self.__interpolation_df[boolean_filter.to_list()]
+    #         fsf_value = self.__interpolation_df[boolean_filter.to_list()].iat[0, 1]
+    #         self.statistics_df.at[19+n, "Value"] = fsf_value
+    #     pass
 
 
     def __uniformity_coefficient(self):
@@ -342,11 +342,11 @@ class StatisticalAnalyzer:
         self.__interpolation_df["Grain size (interpolated) "] = y_interpolated
 
         # estimate fsf
-        fsf_grains_to_find = [0.5, 1.0, 2.0]
-        fsf = np.interp(fsf_grains_to_find, y, x)  # axes get flipped to use the same function
-        self.__interpolation_fsf_df['FSA < 0.5 mm'] = 0
-        self.__interpolation_fsf_df['FSA < 1 mm'] = 9
-        self.__interpolation_fsf_df['FSA < 1 mm'] = 9
+        # fsf_grains_to_find = [0.5, 1.0, 2.0]
+        # fsf = np.interp(fsf_grains_to_find, y, x)  # axes get flipped to use the same function
+        # self.__interpolation_fsf_df['FSA < 0.5 mm'] = 0
+        # self.__interpolation_fsf_df['FSA < 1 mm'] = 9
+        # self.__interpolation_fsf_df['FSA < 1 mm'] = 9
 
         pass
 
